@@ -1,0 +1,30 @@
+# Ignore virtual environments
+.venv/
+venv/
+
+# Ignore data, models, logs
+*.csv
+*.pkl
+*.joblib
+*.h5
+*.log
+__pycache__/
+*.pyc
+
+# Ignore git and other local stuff
+.git/
+.gitignore
+.DS_Store
+.env
+.env.local
+
+# Ignore anything not needed for building image
+notebooks/
+data/
+
+# Keep only specific files from artifacts_dir
+artifacts_dir/*
+!artifacts_dir/preprocessor.pkl
+!artifacts_dir/model.pkl
+catboost_info/*
+logs/*

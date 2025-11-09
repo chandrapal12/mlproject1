@@ -1,17 +1,27 @@
-# Use official lightweight Python image
+# Use small, stable base
 FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy all files
-COPY . /app
+# Install system dependencies for ML libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential gcc g++ python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-RUN pip install -r requirements.txt
+# Copy dependency list and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 5000
+# Copy only essential files
+COPY src ./src
+COPY app.py .
+COPY setup.py .
+COPY templates ./templates
+COPY artifacts_dir/preprocessor.pkl artifacts_dir/model.pkl ./artifacts_dir/
+
+# Expose Flask port
 EXPOSE 5000
 
-# Run the app
-CMD ["python", "./app.py"]
+# Default command
+CMD ["python", "app.py"]
